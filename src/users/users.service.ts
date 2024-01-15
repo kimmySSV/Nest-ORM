@@ -24,7 +24,7 @@ export class UsersService {
     } catch (error) {
       console.log(error);
       if(error.errno === 1062){
-        throw new HttpException('Duplicate Email', HttpStatus.CONFLICT); //409
+        throw new HttpException('Duplicate Email !!!', HttpStatus.CONFLICT); //409
       }      
       throw new HttpException('Something Went Wrong', HttpStatus.BAD_REQUEST ); //400
     }
