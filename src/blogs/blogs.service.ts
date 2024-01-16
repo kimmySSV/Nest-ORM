@@ -16,8 +16,16 @@ export class BlogsService {
     return 'This action adds a new blog';
   }
 
-  findAll() {
-    return `This action returns all blogs`;
+  async findAll(): Promise<Blog[]> {
+    // const blogs = await this.blogsRepository.find({
+    //   relations: ['user']
+    // });
+
+    const blogs = await this.blogsRepository.createQueryBuilder('blog')
+    .innerJoinAndSelect('blog.user', 'user')
+    .select(['blog', 'user.id', 'user.fullname'])
+    .getMany();
+    return blogs;
   }
 
   findOne(id: number) {
