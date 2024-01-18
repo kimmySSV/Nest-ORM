@@ -10,7 +10,7 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
-  @Post()
+  @Post('')
   create(@Body() createBlogDto: CreateBlogDto) {
     return this.blogsService.create(createBlogDto);
   }
@@ -22,6 +22,7 @@ export class BlogsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    console.log(id);
     return this.blogsService.findOne(+id);
   }
 

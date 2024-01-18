@@ -11,6 +11,9 @@ export class Blog {
   @Column()
   topic: string;
 
+  @Column({default: 'nopic.png'})
+  photo: string;
+
   @Column()
   details: string;
 
