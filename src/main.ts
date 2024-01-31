@@ -8,7 +8,7 @@ async function bootstrap() {
     type: VersioningType.URI
   });
   app.setGlobalPrefix('api');
-  await app.listen(3000);
+  await app.listen(process.env.APP_PORT);
   
 }
 bootstrap();
