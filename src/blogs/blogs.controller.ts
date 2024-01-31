@@ -3,11 +3,14 @@ import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 
-@Controller('blogs')
+@Controller({
+  version: '1',
+  path: 'blogs'
+})
 export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
-  @Post()
+  @Post('')
   create(@Body() createBlogDto: CreateBlogDto) {
     return this.blogsService.create(createBlogDto);
   }
@@ -19,6 +22,7 @@ export class BlogsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
+    console.log(id);
     return this.blogsService.findOne(+id);
   }
 

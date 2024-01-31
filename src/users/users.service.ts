@@ -31,7 +31,7 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    return await this.usersRepository.find({ order: { id: 'DESC' } });
+    return await this.usersRepository.find({ order: { id: 'DESC' },relations:['blogs'] });
   }
 
   // SQL
