@@ -9,10 +9,17 @@ import { Blog } from './blogs/entities/blog.entity';
 import { ServeStaticModule } from '@nestjs/serve-static/dist';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { JwtStrategy } from './auth/jwt.strategy';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 10,
+    }]),
     ConfigModule.forRoot(),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
@@ -30,6 +37,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     UsersModule,
     BlogsModule,
+    AuthModule,
     
   ],
   controllers: [AppController],

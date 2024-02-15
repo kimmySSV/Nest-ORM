@@ -18,9 +18,9 @@ export class BlogsService {
     private blogsRepository: Repository<Blog>,
   ) {}
 
-  async create(createBlogDto: CreateBlogDto) {
-    const user = new User();
-    user.id = 1;
+  async create(createBlogDto: CreateBlogDto, user: User){
+    // const user = new User();
+    // user.id = 1;
     const blog = new Blog();
     blog.topic = createBlogDto.topic;
     blog.details = createBlogDto.details;

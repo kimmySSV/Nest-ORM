@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller({
   version: '1',
   path: 'blogs'
@@ -11,8 +13,9 @@ export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
   @Post('')
-  create(@Body() createBlogDto: CreateBlogDto) {
-    return this.blogsService.create(createBlogDto);
+  create(@Body() createBlogDto: CreateBlogDto, @Req() req: any) {
+    //return req.user;
+    return this.blogsService.create(createBlogDto, req.user);
   }
 
   @Get()
