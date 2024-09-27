@@ -5,7 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { query } from 'express';
 import { AdminJwtAuthGuard } from 'src/auth/admin-jwt-auth.guard';
 
-@UseGuards(AdminJwtAuthGuard)
+//@UseGuards(AdminJwtAuthGuard)
 @Controller({
   version: '1',
   path: 'users'

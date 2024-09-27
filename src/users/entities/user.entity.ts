@@ -1,8 +1,8 @@
-import { Blog } from 'src/blogs/entities/blog.entity';
+
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity({
-    name: 'user',
+    name: 'USER_NEST_LOGIN',
 })
 export class User {
   @PrimaryGeneratedColumn()
@@ -26,8 +26,8 @@ export class User {
   @Column({default: 'member'})
   permission: string;
 
-  //Relation
-  @OneToMany(() => Blog, blog => blog.user)
-  blogs: Blog[];
+  // @Column({default: Date() })
+  // lastLogin: Date;
+
 
 }

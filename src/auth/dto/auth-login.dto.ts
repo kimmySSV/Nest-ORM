@@ -8,4 +8,10 @@ export class AuthLoginDto {
     @IsNotEmpty()
     password: string;
 
+    @IsNotEmpty()
+    userAgent: string;
+
+    // @IsNotEmpty()
+    // userIp: string;
+
 }
