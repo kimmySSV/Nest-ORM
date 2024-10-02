@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -19,14 +19,18 @@ import { CardStatusModule } from './card-status/card-status.module';
 import { CardStatusEntity } from './card-status/entities/card-status.entity';
 import { CardPinModule } from './card-pin/card-pin.module';
 import { CardPinEntity } from './card-pin/entities/card-pin.entity';
-
+import { LoggerMiddleware } from './logger.middleware';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './all-exception.filter';
 
 @Module({
   imports: [
-    ThrottlerModule.forRoot([{
-      ttl: 60000,
-      limit: 10,
-    }]),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
     ConfigModule.forRoot(),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
@@ -48,14 +52,14 @@ import { CardPinEntity } from './card-pin/entities/card-pin.entity';
       username: process.env.ORA_USER,
       password: process.env.ORA_PASSWORD,
       connectString: '10.0.4.181:1539/ATMRPT',
-      entities: 
-      [
+      //connectString: 'atmdb-dc-scan.ldblao.la:1545/ATMPRODSVC',
+      entities: [
         User,
         UserActivityEntity,
         ProductEntity,
         TransactiontEntity,
         CardStatusEntity,
-        CardPinEntity
+        CardPinEntity,
       ],
       //synchronize: true,
     }),
@@ -65,9 +69,18 @@ import { CardPinEntity } from './card-pin/entities/card-pin.entity';
     TransactionModule,
     CardStatusModule,
     CardPinModule,
-    
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: AllExceptionsFilter,
+    // },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(LoggerMiddleware).exclude().forRoutes('*');
+  }
+}

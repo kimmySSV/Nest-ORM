@@ -22,7 +22,6 @@ export class CardStatusService {
     const { cardNo, statusUpdate } = bodyReq;
     const sql = `SELECT CARD_NO, CARD_CUST_ID, CARD_CRDACCT_NO, CARD_EMBOSSED_NAME, CARD_PLASTIC_CODE FROM ONECARD.CZ_CARD@ONECARD_LINK_DC WHERE CARD_NO = '${cardNo}' `;
     const card = await this.cardStatusRepository.query(sql);
-    console.log(bodyReq);
     if (!card.length) {
       return {
         response: '05',
@@ -60,7 +59,6 @@ export class CardStatusService {
     const { cardNo, statusUpdate } = bodyReq;
     const sql = `SELECT CARD_NO, CARD_CUST_ID, CARD_CRDACCT_NO, CARD_EMBOSSED_NAME, CARD_PLASTIC_CODE FROM ONECARD.CZ_CARD@ONECARD_UAT WHERE CARD_NO = '${cardNo}' `;
     const card = await this.cardStatusRepository.query(sql);
-    console.log(bodyReq);
     if (!card.length) {
       return {
         response: '05',

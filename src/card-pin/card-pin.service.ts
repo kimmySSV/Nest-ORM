@@ -8,7 +8,6 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class CardPinService {
-
   constructor(
     @InjectRepository(CardPinEntity)
     private readonly cardPinRepository: Repository<CardPinEntity>,
@@ -21,39 +20,51 @@ export class CardPinService {
   //PROD Services
   async resetCardPinService(@Body() bodyReq: cardPinDto): Promise<any> {
     const { cardNo } = bodyReq;
-    const sql = `SELECT CRDPIN_CARD_NO, CRDPIN_PINTYPE_ID, CRDPIN_TRY_COUNT FROM ONECARD.CZ_CRDPIN@ONECARD_LINK_DC WHERE CRDPIN_PINTYPE_ID = 'CRDPIN' AND CRDPIN_CARD_NO = ${cardNo} `;
-    const card = await this.cardPinRepository.query(sql);
+    // const sql = `SELECT CRDPIN_CARD_NO, CRDPIN_PINTYPE_ID, CRDPIN_TRY_COUNT FROM ONECARD.CZ_CRDPIN@ONECARD_LINK_DC WHERE CRDPIN_PINTYPE_ID = 'CRDPIN' AND CRDPIN_CARD_NO = ${cardNo} `;
+    // const card = await this.cardPinRepository.query(sql);
     console.log(bodyReq);
-    if (!card.length) {
-      return {
-        response: '05',
-        data: {
-          cardData: card,
-          message: "Card Not Found"
-        },
-      };
-    }
-
-    const sqlReset = `UPDATE ONECARD.CZ_CRDPIN@ONECARD_LINK_DC SET CRDPIN_TRY_COUNT = '0' WHERE CRDPIN_PINTYPE_ID = 'CRDPIN' AND CRDPIN_CARD_NO = '${cardNo}' `;
-    const cardUpdate = await this.cardPinRepository.query(sqlReset);
-    const cardResetResult = await this.cardPinRepository.query(sql);
-    //console.log(cardUpdate);
-    if(!cardUpdate){
-      return {
-        response: '05',
-        data: {
-          cardData: cardResetResult,
-          message: "Something Went Wrong!!! Card Not Reset ATM Card Pin Count"
-        },
-      };
-    }
-    return {
-      response : "00",
-      data: {
-        cardData: cardResetResult,
-        message: "Successful Reset ATM Card Pin Count"
+    // if (!card.length) {
+    //   return {
+    //     response: '05',
+    //     data: {
+    //       cardData: card,
+    //       message: "Card Not Found"
+    //     },
+    //   };
+    // }
+    try {
+      const sqlReset = `UPDATE ONECARD.CZ_CRDPIN@ONECARD_LINK_DC SET CRDPIN_TRY_COUNT = '0' WHERE CRDPIN_PINTYPE_ID = 'CRDPIN' AND CRDPIN_CARD_NO = '${cardNo}' `;
+      const cardUpdate = await this.cardPinRepository.query(sqlReset);
+      //const cardResetResult = await this.cardPinRepository.query(sql);
+      //console.log(cardUpdate);
+      if (!cardUpdate) {
+        return {
+          response: '05',
+          data: {
+            cardData: null,
+            message:
+              'Something Went Wrong!!! Card Not Reset ATM Card Pin Count',
+          },
+        };
       }
-    };
+      return {
+        response: '00',
+        data: {
+          cardData: {},
+          message: 'Successful Reset ATM Card Pin Count',
+        },
+      };
+    } catch (error) {
+      console.log(error);
+      
+      return {
+        response: '05',
+        data: {
+          //cardData: cardResetResult,
+          message: 'Exception Error !!!',
+        },
+      };
+    }
   }
 
   // UAT Services
@@ -66,8 +77,8 @@ export class CardPinService {
       return {
         response: '05',
         data: {
-          cardData: card,
-          message: "Card Not Found"
+          cardData: null,
+          message: 'Card Not Found',
         },
       };
     }
@@ -76,21 +87,21 @@ export class CardPinService {
     const cardUpdate = await this.cardPinRepository.query(sqlReset);
     const cardResetResult = await this.cardPinRepository.query(sql);
     //console.log(cardUpdate);
-    if(!cardUpdate){
+    if (!cardUpdate) {
       return {
         response: '05',
         data: {
-          cardData: cardResetResult,
-          message: "Something Went Wrong!!! Card Not Reset ATM Card Pin Count"
+          cardData: null,
+          message: 'Something Went Wrong!!! Card Not Reset ATM Card Pin Count',
         },
       };
     }
     return {
-      response : "00",
+      response: '00',
       data: {
-        cardData: cardResetResult,
-        message: "Successful Reset ATM Card Pin Count"
-      }
+        cardData: {},
+        message: 'Successful Reset ATM Card Pin Count',
+      },
     };
   }
 
